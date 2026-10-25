@@ -2,10 +2,9 @@ import React from 'react';
 import { 
   Pizza, 
   Sandwich, 
-  Users, 
-  GlassWater, 
-  CakeSlice, 
-  Sparkles, 
+  Flame, 
+  CupSoda, 
+  Citrus, 
   UtensilsCrossed 
 } from 'lucide-react';
 import { CATEGORIES } from '../data/menu';
@@ -20,10 +19,9 @@ const ICON_MAP: Record<string, React.ElementType> = {
   UtensilsCrossed,
   Pizza,
   Sandwich,
-  Users,
-  GlassWater,
-  CakeSlice,
-  Sparkles,
+  Flame,
+  CupSoda,
+  Citrus,
 };
 
 export const CategoryCarousel: React.FC<CategoryCarouselProps> = ({

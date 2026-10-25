@@ -1,4 +1,4 @@
-export type CategoryId = 'todos' | 'pizzas' | 'acompanhamentos' | 'bebidas' | 'combos' | 'sobremesas' | 'promocoes';
+export type CategoryId = 'todos' | 'pizzas' | 'hamburgueres' | 'fajitas' | 'refrigerantes' | 'sumos';
 
 export interface Product {
   id: string;

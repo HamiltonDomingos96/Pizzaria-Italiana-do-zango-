@@ -8,7 +8,7 @@ import { ProductCustomizerModal } from './components/ProductCustomizerModal';
 import { CartDrawer } from './components/CartDrawer';
 import { BottomNavBar, TabType } from './components/BottomNavBar';
 import { StoreInfoModal } from './components/StoreInfoModal';
-import { MENU_PRODUCTS, STORE_INFO, formatAOA } from './data/menu';
+import { MENU_PRODUCTS, STORE_INFO, formatAOA, CATEGORIES } from './data/menu';
 import { Product, CartItem, CategoryId, PizzaSize, PizzaCrust } from './types';
 import { 
   Flame, 
@@ -135,10 +135,7 @@ export default function App() {
   const filteredProducts = useMemo(() => {
     return MENU_PRODUCTS.filter((product) => {
       // Category match
-      if (selectedCategory === 'promocoes') {
-        const isPromo = product.category === 'combos' || product.badge === 'OFERTA ESPECIAL';
-        if (!isPromo) return false;
-      } else if (selectedCategory !== 'todos' && product.category !== selectedCategory) {
+      if (selectedCategory !== 'todos' && product.category !== selectedCategory) {
         return false;
       }
 
@@ -170,9 +167,8 @@ export default function App() {
       const menuElem = document.getElementById('menu-section');
       menuElem?.scrollIntoView({ behavior: 'smooth' });
     } else if (tab === 'offers') {
-      setSelectedCategory('promocoes');
-      const menuElem = document.getElementById('menu-section');
-      menuElem?.scrollIntoView({ behavior: 'smooth' });
+      const promoElem = document.getElementById('promo-section');
+      promoElem?.scrollIntoView({ behavior: 'smooth' });
     } else if (tab === 'cart') {
       setIsCartOpen(true);
     } else if (tab === 'info') {
@@ -217,12 +213,14 @@ export default function App() {
 
         {/* Promo Voucher Banner */}
         {!searchQuery && (
-          <PromoCard
-            onApplyCoupon={(code) => {
-              setAppliedCoupon(code);
-              showToast(`Cupão ${code} ativado!`);
-            }}
-          />
+          <div id="promo-section">
+            <PromoCard
+              onApplyCoupon={(code) => {
+                setAppliedCoupon(code);
+                showToast(`Cupão ${code} ativado!`);
+              }}
+            />
+          </div>
         )}
 
         {/* Category Carousel Navigation */}
@@ -279,9 +277,7 @@ export default function App() {
                   ? `Resultados para "${searchQuery}"`
                   : selectedCategory === 'todos'
                   ? 'Nosso Cardápio Completo'
-                  : selectedCategory === 'promocoes'
-                  ? 'Promoções & Combos Familiares'
-                  : `Cardápio: ${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)}`}
+                  : `Cardápio: ${CATEGORIES.find((c) => c.id === selectedCategory)?.label || selectedCategory}`}
               </h2>
               <p className="text-xs text-stone-500 mt-0.5">
                 {filteredProducts.length} {filteredProducts.length === 1 ? 'opção disponível' : 'opções disponíveis'}
@@ -304,16 +300,16 @@ export default function App() {
               <div className="w-12 h-12 bg-stone-100 rounded-full flex items-center justify-center mx-auto text-stone-400 mb-3">
                 <Search className="w-6 h-6" />
               </div>
-              <h3 className="font-bold text-stone-800 text-base">Nenhum prato encontrado</h3>
+              <h3 className="font-bold text-stone-800 text-base">Nenhum item encontrado</h3>
               <p className="text-xs text-stone-500 mt-1 mb-4">
-                Não encontramos itens correspondentes à sua pesquisa. Tente buscar por Margherita, Calabresa, refrigerante ou combos.
+                Não encontramos itens correspondentes à sua pesquisa. Tente buscar por Pizza, Hambúrguer, Fajita, Refrigerante ou Sumo Natural.
               </p>
               <button
                 onClick={() => {
                   setSearchQuery('');
                   setSelectedCategory('todos');
                 }}
-                className="px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-bold hover:bg-red-700 transition-colors"
+                className="px-4 py-2 bg-red-600 text-white rounded-xl text-xs font-bold hover:bg-red-700 transition-colors cursor-pointer"
               >
                 Ver Cardápio Completo
               </button>

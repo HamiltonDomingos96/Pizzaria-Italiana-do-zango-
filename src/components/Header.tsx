@@ -113,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Pesquisar pizza, bebidas, combos..."
+              placeholder="Pesquisar pizza, hambúrguer, fajitas, sumos..."
               className="w-full bg-stone-800/90 text-stone-100 placeholder-stone-400 text-sm rounded-xl pl-10 pr-9 py-2.5 border border-stone-700/70 focus:border-red-500 focus:bg-stone-800 focus:outline-none transition-all shadow-inner"
             />
             {searchQuery && (

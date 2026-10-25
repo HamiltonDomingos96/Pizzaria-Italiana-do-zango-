@@ -242,7 +242,7 @@ _Enviado pelo App Web da Pizzaria Italiana_`;
               <div className="space-y-1">
                 <h3 className="font-bold text-stone-800 text-base">O seu carrinho está vazio</h3>
                 <p className="text-xs text-stone-500 max-w-xs mx-auto">
-                  Adicione as nossas autênticas pizzas de massa artesanal, bebidas frescas ou combos para começar.
+                  Adicione as nossas autênticas pizzas artesanais, hambúrgueres suculentos, fajitas ou sumos naturais para começar.
                 </p>
               </div>
               <button
