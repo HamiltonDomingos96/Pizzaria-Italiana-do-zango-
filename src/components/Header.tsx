@@ -57,12 +57,12 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center justify-between gap-4">
           {/* Brand Logo & Subtitle */}
           <div className="flex items-center gap-3">
-            <div className="relative">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-600 via-stone-900 to-emerald-700 p-0.5 shadow-lg flex items-center justify-center">
-                <div className="w-full h-full bg-stone-900 rounded-[10px] flex items-center justify-center">
-                  <span className="text-xl font-bold font-serif-italian text-red-500">PI</span>
-                </div>
-              </div>
+            <div className="relative shrink-0">
+              <img
+                src={STORE_INFO.logoUrl}
+                alt="Pizzaria Italiana Sabor & Cozinha"
+                className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl object-cover border border-stone-700 shadow-md"
+              />
               <div className="absolute -bottom-1 -right-1 flex gap-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
                 <span className="w-1.5 h-1.5 rounded-full bg-stone-100"></span>
@@ -71,11 +71,16 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             <div>
-              <h1 className="text-lg sm:text-xl font-extrabold tracking-tight font-serif-italian text-white flex items-center gap-1.5">
-                PIZZARIA ITALIANA
-              </h1>
+              <div className="flex items-center gap-1.5">
+                <h1 className="text-lg sm:text-xl font-extrabold tracking-tight font-serif-italian text-white">
+                  PIZZARIA ITALIANA
+                </h1>
+                <span className="text-[9px] sm:text-[10px] px-1.5 py-0.5 bg-red-950/80 border border-red-800 text-red-400 rounded font-semibold uppercase tracking-wider hidden xs:inline">
+                  Sabor & Cozinha
+                </span>
+              </div>
               <p className="text-[10px] sm:text-[11px] tracking-widest uppercase font-semibold text-stone-400">
-                MASSAS ARTESANAIS <span className="text-red-500">•</span> TRADIÇÃO ITALIANA
+                MASSAS ARTESANAIS <span className="text-red-500">•</span> ZANGO 2
               </p>
             </div>
           </div>
@@ -113,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Pesquisar pizza, hambúrguer, fajitas, sumos..."
+              placeholder="Pesquisar pizza, fahita, hambúrguer, bebidas..."
               className="w-full bg-stone-800/90 text-stone-100 placeholder-stone-400 text-sm rounded-xl pl-10 pr-9 py-2.5 border border-stone-700/70 focus:border-red-500 focus:bg-stone-800 focus:outline-none transition-all shadow-inner"
             />
             {searchQuery && (

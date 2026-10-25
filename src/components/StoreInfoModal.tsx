@@ -19,12 +19,15 @@ export const StoreInfoModal: React.FC<StoreInfoModalProps> = ({ isOpen, onClose 
         {/* Header */}
         <div className="bg-stone-900 text-white p-5 flex items-center justify-between border-b border-stone-800">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center font-serif-italian font-bold text-white text-lg shadow-sm">
-              PI
-            </div>
+            <img
+              src={STORE_INFO.logoUrl}
+              alt={STORE_INFO.name}
+              className="w-12 h-12 rounded-xl object-cover border border-stone-700 shadow-sm shrink-0"
+            />
             <div>
               <h2 className="text-base font-bold font-serif-italian">{STORE_INFO.name}</h2>
-              <p className="text-[11px] text-stone-400">{STORE_INFO.subtitle}</p>
+              <p className="text-[11px] text-amber-400 font-semibold">{STORE_INFO.slogan}</p>
+              <p className="text-[10px] text-stone-400">{STORE_INFO.subtitle}</p>
             </div>
           </div>
 

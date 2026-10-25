@@ -8,6 +8,7 @@ import { ProductCustomizerModal } from './components/ProductCustomizerModal';
 import { CartDrawer } from './components/CartDrawer';
 import { BottomNavBar, TabType } from './components/BottomNavBar';
 import { StoreInfoModal } from './components/StoreInfoModal';
+import { PromotionsSection } from './components/PromotionsSection';
 import { MENU_PRODUCTS, STORE_INFO, formatAOA, CATEGORIES } from './data/menu';
 import { Product, CartItem, CategoryId, PizzaSize, PizzaCrust } from './types';
 import { 
@@ -207,13 +208,27 @@ export default function App() {
         {!searchQuery && (
           <HeroBanner
             onCtaClick={scrollToMenu}
-            onOpenPromo={() => setIsCartOpen(true)}
+            onOpenPromo={() => {
+              const promoElem = document.getElementById('promo-section');
+              promoElem?.scrollIntoView({ behavior: 'smooth' });
+            }}
           />
         )}
 
-        {/* Promo Voucher Banner */}
+        {/* Official Promotions Section (Segunda a Quinta & Fim de Semana) */}
         {!searchQuery && (
-          <div id="promo-section">
+          <PromotionsSection
+            onSelectCategory={(cat) => {
+              setSelectedCategory(cat);
+              const menuElem = document.getElementById('menu-section');
+              menuElem?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          />
+        )}
+
+        {/* Promo Voucher Banner (Entrega Grátis no 1º Pedido) */}
+        {!searchQuery && (
+          <div id="voucher-section">
             <PromoCard
               onApplyCoupon={(code) => {
                 setAppliedCoupon(code);

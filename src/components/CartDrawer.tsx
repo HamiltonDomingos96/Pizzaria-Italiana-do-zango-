@@ -13,7 +13,8 @@ import {
   CheckCircle2,
   Bike,
   Store,
-  AlertCircle
+  AlertCircle,
+  Gift
 } from 'lucide-react';
 import { CartItem } from '../types';
 import { 
@@ -60,6 +61,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [paymentMethod, setPaymentMethod] = useState('express');
   const [cashChangeFor, setCashChangeFor] = useState('');
   const [orderNotes, setOrderNotes] = useState('');
+  const [selectedPromoGift, setSelectedPromoGift] = useState('');
 
   // Coupon input
   const [couponInput, setCouponInput] = useState('');
@@ -70,6 +72,56 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   // Pricing calculations
   const subtotal = items.reduce((sum, item) => sum + item.itemPrice * item.quantity, 0);
+
+  // Promo Calculation based on day of week and items in cart
+  const pizzaCount = items
+    .filter((i) => i.product.category === 'pizzas')
+    .reduce((sum, i) => sum + i.quantity, 0);
+
+  const burgerCount = items
+    .filter((i) => i.product.category === 'hamburgueres')
+    .reduce((sum, i) => sum + i.quantity, 0);
+
+  const currentDay = new Date().getDay();
+  const isWeekend = currentDay === 0 || currentDay === 5 || currentDay === 6;
+
+  interface PromoOption {
+    id: string;
+    label: string;
+    description: string;
+  }
+
+  const eligibleOffers: PromoOption[] = [];
+
+  if (!isWeekend) {
+    // Segunda a Quinta-feira
+    if (pizzaCount >= 2) {
+      eligibleOffers.push(
+        { id: '2gasosas', label: '2x Gasosas Grátis', description: 'Promoção: 2 Pizzas = 2 Gasosas grátis' },
+        { id: '1fahita', label: '1x Fahita Grátis', description: 'Promoção: 2 Pizzas = 1 Fahita à escolha' }
+      );
+    } else if (pizzaCount === 1) {
+      eligibleOffers.push({ id: '1gasosa', label: '1x Gasosa Grátis', description: 'Promoção: 1 Pizza = 1 Gasosa grátis' });
+    }
+
+    if (burgerCount >= 1) {
+      eligibleOffers.push({ id: '1gasosa_burger', label: '1x Gasosa Grátis (Oferta Hambúrguer)', description: 'Promoção: 1 Hambúrguer = 1 Gasosa' });
+    }
+  } else {
+    // Fim de Semana (Sexta a Domingo)
+    if (pizzaCount >= 3) {
+      eligibleOffers.push({ id: '4th_pizza', label: '1x 4ª Pizza Grátis (Margarita)', description: 'Promoção FDS: Na compra de 3 Pizzas, ganha a 4ª Pizza grátis' });
+    } else if (pizzaCount === 2) {
+      eligibleOffers.push(
+        { id: 'fahita_fds', label: '1x Fahita Grátis', description: 'Promoção FDS: 2 Pizzas = 1 Fahita à escolha' },
+        { id: 'burger_fds', label: '1x Hambúrguer Grátis', description: 'Promoção FDS: 2 Pizzas = 1 Hambúrguer à escolha' }
+      );
+    }
+
+    if (burgerCount >= 2) {
+      eligibleOffers.push({ id: 'batatas_fds', label: '1x Dose de Batatas Fritas Grátis', description: 'Promoção FDS: Na compra de 2 ou 3 Hambúrgueres' });
+    }
+  }
 
   const selectedZone = DELIVERY_ZONES.find((z) => z.id === selectedZoneId) || DELIVERY_ZONES[0];
   const initialDeliveryFee = deliveryType === 'pickup' ? 0 : selectedZone.fee;
@@ -165,6 +217,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         : 'Retirada no Balcão (Zango 2 - Paragem da ZAP)';
 
     const discountText = discountAmount > 0 ? `\n*Desconto:* -${formatAOA(discountAmount)}` : '';
+    const promoGiftText = selectedPromoGift ? `\n*🎁 Oferta/Brinde Especial:* ${selectedPromoGift}` : '';
     const notesText = orderNotes.trim() ? `\n*Obs Geral:* ${orderNotes.trim()}` : '';
 
     const message = 
@@ -174,13 +227,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 *Modalidade:* ${deliveryType === 'delivery' ? 'Entrega ao Domicílio' : 'Retirada na Loja'}
 *Endereço:* ${deliveryAddressText}
 *Itens:*
-${itemsText.trimEnd()}
+${itemsText.trimEnd()}${promoGiftText}
 *Subtotal:* ${formatAOA(subtotal)}
 *Taxa de Entrega:* ${formatAOA(initialDeliveryFee)}${discountText}
 *Total:* ${formatAOA(finalTotal)}
 *Pagamento:* ${paymentWithCashChange}${notesText}
 ---
-_Enviado pelo App Web da Pizzaria Italiana_`;
+_Enviado pelo App Web da Pizzaria Italiana (Zango 2)_`;
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${STORE_INFO.whatsappRaw}?text=${encodedMessage}`;
@@ -498,6 +551,57 @@ _Enviado pelo App Web da Pizzaria Italiana_`;
                   </div>
                 </div>
               </div>
+
+              {/* Eligible Promo Gift Selector */}
+              {eligibleOffers.length > 0 && (
+                <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-3.5 border border-amber-300 shadow-2xs space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
+                      <Gift className="w-4 h-4 text-red-600" />
+                      Brinde Promocional Desbloqueado!
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-red-600 text-white uppercase">
+                      Oferta Grátis
+                    </span>
+                  </div>
+
+                  <p className="text-[11px] text-stone-600 leading-tight">
+                    Parabéns! Pelo seu pedido, você tem direito a uma oferta da promoção ({isWeekend ? 'Fim de Semana' : 'Segunda a Quinta'}). Escolha o seu brinde:
+                  </p>
+
+                  <div className="space-y-1.5 pt-0.5">
+                    {eligibleOffers.map((offer) => {
+                      const isSelected = selectedPromoGift === offer.label || (!selectedPromoGift && offer === eligibleOffers[0]);
+                      return (
+                        <label
+                          key={offer.id}
+                          onClick={() => setSelectedPromoGift(offer.label)}
+                          className={`flex items-center justify-between p-2.5 rounded-lg border text-xs cursor-pointer transition-all ${
+                            isSelected
+                              ? 'bg-white border-red-600 font-bold text-stone-900 shadow-xs ring-1 ring-red-600'
+                              : 'bg-white/80 border-amber-200 hover:bg-white text-stone-700'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="radio"
+                              name="promoGift"
+                              checked={isSelected}
+                              onChange={() => setSelectedPromoGift(offer.label)}
+                              className="accent-red-600"
+                            />
+                            <div>
+                              <div>{offer.label}</div>
+                              <div className="text-[10px] text-stone-500 font-normal">{offer.description}</div>
+                            </div>
+                          </div>
+                          <span className="text-[10px] text-emerald-700 font-extrabold shrink-0">GRÁTIS</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               {/* Coupon Section */}
               <div className="bg-white rounded-xl p-3.5 border border-stone-200 space-y-2">
