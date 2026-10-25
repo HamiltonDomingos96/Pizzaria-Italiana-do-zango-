@@ -1,0 +1,6 @@
+{
+  "name": "Pizzaria Italiana Luanda",
+  "description": "Pizzaria Italiana no Zango 2, Luanda. Massas artesanais de fermentação lenta, pizzas autênticas e pedidos via WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
