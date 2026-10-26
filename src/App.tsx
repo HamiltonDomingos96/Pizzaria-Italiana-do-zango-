@@ -423,8 +423,9 @@ export default function App() {
 
           <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-stone-500 text-[11px]">
             <p>© {new Date().getFullYear()} Pizzaria Italiana Luanda. Todos os direitos reservados.</p>
-            <p className="flex items-center gap-1">
-              Feito com paixão italiana & sabor angolano
+            <p className="flex items-center gap-1.5 text-stone-400">
+              <span>Desenvolvido pela empresa</span>
+              <span className="font-bold text-stone-200">H-Digital</span>
             </p>
           </div>
         </div>
